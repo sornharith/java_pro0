@@ -164,7 +164,7 @@ public class StudentTester {
 		
 		System.out.println("@@@ Validating Canteen ICT .... "+canteen.validateCanteen());
 	
-		canteen.simulate(30);
+		canteen.simulate();
 	}
 	
 	
@@ -209,10 +209,10 @@ public class StudentTester {
 		
 		// testValidation();
 //		testOneWay(); 
-//		testDebug();
+//		 testDebug();
 //		testSimple();
 		testCongestion();	// This may take up to a minute
-//		testLarge();		// This may take up to a minute
+//		 testLarge();		// This may take up to a minute
 		
 		
 		//testBonus();	//For Bonus

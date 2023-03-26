@@ -110,7 +110,7 @@ public class CanteenICT {
 	private void preprocess()
 	{
 		//******************************************** YOUR CODE HERE (IF ANY) *******************************//
-		
+		this.getwTable().removeAll(this.getwTable());
 		//****************************************************************************************************//
 	}
 	

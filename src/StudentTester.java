@@ -207,12 +207,12 @@ public class StudentTester {
 		
 		//Uncomment each case, one by one, to test your code. Do not uncomment all at once.
 		
-		// testValidation();
+		 testValidation();
 //		testOneWay(); 
 //		 testDebug();
-//		testSimple();
-		testCongestion();	// This may take up to a minute
-//		 testLarge();		// This may take up to a minute
+//		 testSimple();
+		// testCongestion();	// This may take up to a minute
+		//  testLarge();		// This may take up to a minute
 		
 		
 		//testBonus();	//For Bonus

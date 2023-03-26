@@ -1,12 +1,12 @@
-// File: <FILE NAME>
-// Description: <DESCRIPTION>
-// Project: <PROJECT NUMBER e.g., 1, or 2>
+// File: Customer
+// Description: method of all action that will have in canteen
+// Project: 1
 //
-// ID: <YOUR STUDENT ID>
-// Name: <YOUR FULLNAME>
-// Section: <YOUR SECTION e.g., 1, 2, or 3>
+// ID: 6588067
+// Name: Harith Phalangpatanakij
+// Section: 2
 //
-// On my honor, <YOUR FULLNAME>, this project assignment is my own work
+// On my honor, Harith Phalangpatanakij, this project assignment is my own work
 // and I have not provided this code to any other students.
 
 
@@ -45,9 +45,9 @@ public class Customer {
 		this.canteen = _canteen;
 		this.customerType = CustomerType.DEFAULT;
 		this.payment = Payment.DEFAULT;	
-		this.customerID = this.customerRunningNumber;
+		this.customerID = this.customerRunningNumber; // running of customer ID
 		this.customerRunningNumber++;
-		adddish();
+		adddish(); // add all of the menu
 		//*****************************************************
 	}
 	
@@ -63,9 +63,10 @@ public class Customer {
 		//******************* YOUR CODE HERE **********************
 		this.canteen = _canteen;
 		this.payment = payment;
-		this.customerID = this.customerRunningNumber;
+		this.customerType = CustomerType.DEFAULT;
+		this.customerID = this.customerRunningNumber;// running of customer ID
 		this.customerRunningNumber++;
-		adddish();
+		adddish();// add all of the menu
 		//*****************************************************
 	}
 	
@@ -78,29 +79,33 @@ public class Customer {
 	public boolean takeAction()
 	{
 		//************************** YOUR CODE HERE **********************//
-		if(this.state == 0) {
+		if(this.state == 0) { // for adding the customer queue to store
 			if (this.customerID == this.canteen.getWaitToEnter().get(0).getCustomerID()) {
 				
-				if (this.canteen.getfoodStalls().get(shortestqueue()).getCustomerQueue().size() < 5) {
+				if (this.canteen.getfoodStalls().get(shortestqueue()).getCustomerQueue().size() < 5) { // in each store need to have customer least than 5 people
 					this.canteen.getfoodStalls().get(shortestqueue()).getCustomerQueue().add(this.canteen.getWaitToEnter().get(0));
-//					this.canteen.getWaitToEnter().remove(0);
+					this.canteen.getwStore().add(this.canteen.getWaitToEnter().get(0)); 
 					this.state++;
 					jot("@"+getCode()+"-"+getstate()+" queues up at "+this.canteen.getfoodStalls().get(shortestqueue()).getName()+ ", and waiting to order.");
 					return true;
 				}
 			}
-		} else if (state == 1) {
+		} else if (state == 1) { // for order the food in the menu
 			for (int i = 0 ; i < this.canteen.getfoodStalls().size() ; i++){
-				if(this.customerID == this.canteen.getfoodStalls().get(i).getCustomerQueue().get(0).getCustomerID()) {
-					if(this.canteen.getfoodStalls().get(i).isWaitingForOrder()){
-						this.canteen.getfoodStalls().get(i).takeOrder(this.requiredDishes);
-						this.state++;
-						jot("@"+getCode()+"-"+getstate()+" orders from "+this.canteen.getfoodStalls().get(i).getName()+", and will need to wait for 9 periods to cook.");
-						return true;
+				if (this.canteen.getfoodStalls().get(i).getCustomerQueue().size() != 0) {
+					if(this.customerID == this.canteen.getfoodStalls().get(i).getCustomerQueue().get(0).getCustomerID() ) {
+						if(this.canteen.getfoodStalls().get(i).isWaitingForOrder() && this.canteen.getfoodStalls().size() != 0){
+							this.canteen.getfoodStalls().get(i).takeOrder(this.requiredDishes);
+							this.state++;
+							setsTime(); // seting of the order that taken
+							jot("@"+getCode()+"-"+getstate()+" orders from "+this.canteen.getfoodStalls().get(i).getName()+", and will need to wait for 9 periods to cook.");
+							return true;
+						}
 					}
 				}
 			}
-		} else if (state == 2){
+
+		} else if (state == 2){ // for payment
 			for (int i = 0 ; i < this.canteen.getfoodStalls().size() ; i++ ){
 				if (this.canteen.getfoodStalls().get(i).getCustomerQueue().size() < 1){
 					continue;
@@ -109,8 +114,9 @@ public class Customer {
 					if (this.canteen.getfoodStalls().get(i).isCooking()){
 						break;
 					} else {
-						if (this.canteen.getfoodStalls().get(i).isReadyToServe()){
+						if (this.canteen.getfoodStalls().get(i).isReadyToServe() && this.sTIme+10 == this.canteen.getCurrentTime()){ // check that ordre that ready and use 10 second for waiting
 							this.canteen.getfoodStalls().get(i).takePayment(payment);
+							setpTime();
 							this.state++;
 							jot("@"+getCode()+"-"+getstate()+" at "+this.canteen.getfoodStalls().get(i).getName()+" using DEFAULT payment which requires 3 period(s) to process payment.");
 							return true;
@@ -118,38 +124,43 @@ public class Customer {
 					}
 					}
 				}
-		} else if (state == 3){
+		} else if (state == 3){ // for this add customer from foodstore to the waiting table
 			for (int i = 0 ; i < this.canteen.getfoodStalls().size() ; i++){
-				if (this.canteen.getfoodStalls().get(i).getCustomerQueue().size() == 0){
+				if (this.canteen.getfoodStalls().get(i).getCustomerQueue().size() == 0){ // skip when have no customer in food order
 					continue;
 				}
-				if (this.customerID == this.canteen.getfoodStalls().get(i).getCustomerQueue().get(shortestqueue()).getCustomerID()){
+				if (this.customerID == this.canteen.getfoodStalls().get(i).getCustomerQueue().get(0).getCustomerID()){
 					if (this.canteen.getfoodStalls().get(i).isPaid()){
 						this.canteen.getfoodStalls().get(i).serve();
 						this.canteen.getWaitToSeat().add(this.canteen.getfoodStalls().get(i).getCustomerQueue().get(0));
-//						this.canteen.getfoodStalls().remove(i);
 						this.state++;
 						jot("@"+getCode()+"-"+getstate()+" retrieves food from "+this.canteen.getfoodStalls().get(i).getName()+", and goes to Waiting-to-Seat Queue.");
 						return true;
 					}
 				}
 			}
-		} else if (state == 4) {
-			for (int i = 0 ; i < this.canteen.getWaitToSeat().size() ; i++) {
-				if (shortestT() == -1){
-					return false;
-				}else {
-					if (this.customerID == this.canteen.getWaitToSeat().get(0).getCustomerID()) {
-						this.canteen.getTable().get(i).getSeatedCustomers().add(this.canteen.getWaitToSeat().get(i));
-//						this.canteen.getSeat().add(this.canteen.getWaitToSeat().get(i));
-						this.canteen.getWaitToSeat().remove(i);
-						this.state++;
-						jot("@"+getCode()+"-"+getstate()+" sits at Table "+(i+1)+".");
-						return true;
-				}
+		} else if (state == 4) { // for adding customer from waiting table to the table
+			int er = 0;
+			if (this.canteen.getWaitToSeat().size() > 0) {
+				for (int i = 0 ; i < this.canteen.getTable().size() ; i++) {
+					for (Table l : this.canteen.getTable()) {
+						if (er < 1){
+						if (!l.isFull() && Ttable == false) { // check that table is full and didn't add customer 2 time in one second
+							l.getSeatedCustomers().add(this.canteen.getWaitToSeat().get(0));
+							er++;
+							Ttable = true;
+							this.canteen.getWaitToSeat().remove(0);	
+							this.state++;
+							jot("@"+getCode()+"-"+getstate()+" sits at Table "+(i+1)+".");
+							return true;
+							}
+						} else if (er > 1){ // if it alerdy add customer to table it will break.
+							break;
+						}	
+					}
 				}
 			}
-		} else if (state == 5){
+		} else if (state == 5){ // for set time that customer start eating
 			for (int i = 0 ; i < this.canteen.getTable().size() ; i++){
 				for (int j = 0 ; j < this.canteen.getTable().get(i).getSeatedCustomers().size() ; j++){
 					if (this.itTIme == 0){
@@ -160,7 +171,7 @@ public class Customer {
 					}
 				}
 			}
-		} else if (state == 6) {
+		} else if (state == 6) { // check that customer done eat
 			for (int i = 0 ; i < this.canteen.getTable().size() ; i++){
 				for (int j = 0 ; j < this.canteen.getTable().get(i).getSeatedCustomers().size() ; j++){
 					if (this.itTIme+28 == this.canteen.getCurrentTime()){
@@ -183,17 +194,17 @@ public class Customer {
 	public int getstate(){
 		return this.state;
 	}
-	public int shortestqueue() {
+	public int shortestqueue() { // method to find which store have shortest queue to go
 		int shortqu = 0;
 		int nnum = 0;
 		if (this.canteen.getfoodStalls().size() > 1){ // have customer come in to store or not
 			for (int i = 0 ; i < this.canteen.getfoodStalls().size() ;i++) {
-				if (i == 0 ) { // first customer 
+				if (i == 0 && this.canteen.getfoodStalls().get(i).getMenu().size() == 5) { // first customer 
 					nnum = this.canteen.getfoodStalls().get(i).getCustomerQueue().size();
 					shortqu = i;
 				}
 				else {
-					if (this.canteen.getfoodStalls().get(i).getCustomerQueue().size() < nnum) {
+					if (this.canteen.getfoodStalls().get(i).getCustomerQueue().size() < nnum && this.canteen.getfoodStalls().get(i).getMenu().size() == 5) {
 						nnum = this.canteen.getfoodStalls().get(i).getCustomerQueue().size();
 						shortqu = i;
 					}
@@ -203,8 +214,8 @@ public class Customer {
 		return shortqu;
 	}
 
-	 public int shortestT (){
-	 	int avaT = -1;
+	 public int shortestT (){ // method to find the table with least customer
+	 	int avaT =  -1;
 		for (int i = 0 ; i < this.canteen.getWaitToSeat().size() ; i++){
 			if (this.canteen.getTable().size() == 1 && this.canteen.getTable().get(0).isFull() == false){
 				avaT = 0;
@@ -219,14 +230,14 @@ public class Customer {
 	 	return avaT;
 	 }
 
-	public void adddish (){
+	public void adddish (){ // add all dish
 		this.requiredDishes.add(FoodStall.Menu.NOODLES);
 		this.requiredDishes.add(FoodStall.Menu.DESSERT);
 		this.requiredDishes.add(FoodStall.Menu.MEAT);
 		this.requiredDishes.add(FoodStall.Menu.SALAD);
 		this.requiredDishes.add(FoodStall.Menu.BEVERAGE);	
 	}
-	public int sumTime(){
+	public int sumTime(){ // findind time that customer need to eat
 		int sum = 0;
 		List<FoodStall.Menu> m = new ArrayList<FoodStall.Menu>();
 		for (int i = 0 ; i < this.canteen.getfoodStalls().size() ; i++){
@@ -243,10 +254,21 @@ public class Customer {
 		}
 		return sum;
 	}
-	private int itTIme = 0;
+	private int itTIme = 0; // time that customer start eating
 	public void setTime(){
 		this.itTIme = this.canteen.getCurrentTime();
 	}
+	private int sTIme = 0; // time that customer order
+	
+	public void setsTime(){
+		this.sTIme = this.canteen.getCurrentTime();
+	}
+	private int pTIme = 0; //time that customer get order
+	public void setpTime(){
+		this.pTIme = this.canteen.getCurrentTime();
+	}
+	public static boolean Ttable = false;
+	
 	//****************************************************************************************************//
 				
 	

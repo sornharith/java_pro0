@@ -1,12 +1,12 @@
-// File: <FILE NAME>
-// Description: <DESCRIPTION>
-// Project: <PROJECT NUMBER e.g., 1, or 2>
+// File: Foodstall
+// Description: method for all about the food
+// Project: 1
 //
-// ID: <YOUR STUDENT ID>
-// Name: <YOUR FULLNAME>
-// Section: <YOUR SECTION e.g., 1, 2, or 3>
+// ID: 6588067
+// Name: Harith Phalangpatanakij
+// Section: 2
 //
-// On my honor, <YOUR FULLNAME>, this project assignment is my own work
+// On my honor, Harith Phalangpatanakij, this project assignment is my own work
 // and I have not provided this code to any other students.
 
 
@@ -46,7 +46,7 @@ public class FoodStall {
 	{
 		//******************* YOUR CODE HERE **********************
 		this.foodStallName = name;
-		for(Menu dish: menu){ 
+		for(Menu dish: menu){  // adding all dish in that store
 			this.availableMenu.add(dish); 
 		}
 		this.orderTime = -1;

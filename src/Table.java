@@ -1,12 +1,12 @@
-// File: <FILE NAME>
-// Description: <DESCRIPTION>
-// Project: <PROJECT NUMBER e.g., 1, or 2>
+// File: Table
+// Description: method that handle about table
+// Project: 1
 //
-// ID: <YOUR STUDENT ID>
-// Name: <YOUR FULLNAME>
-// Section: <YOUR SECTION e.g., 1, 2, or 3>
+// ID: 6588067
+// Name: Harith Phalangpatanakij
+// Section: 2
 //
-// On my honor, <YOUR FULLNAME>, this project assignment is my own work
+// On my honor, Harith Phalangpatanakij, this project assignment is my own work
 // and I have not provided this code to any other students.
 
 

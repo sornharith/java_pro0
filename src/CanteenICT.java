@@ -1,12 +1,12 @@
-// File: <FILE NAME>
-// Description: <DESCRIPTION>
-// Project: <PROJECT NUMBER e.g., 1, or 2>
+// File: CanteenICT
+// Description: run all of the methid
+// Project: 1
 //
-// ID: <YOUR STUDENT ID>
-// Name: <YOUR FULLNAME>
-// Section: <YOUR SECTION e.g., 1, 2, or 3>
+// ID: 6588067
+// Name: Harith Phalangpatanakij
+// Section: 2
 //
-// On my honor, <YOUR FULLNAME>, this project assignment is my own work
+// On my honor, Harith Phalangpatanakij, this project assignment is my own work
 // and I have not provided this code to any other students.
 
 
@@ -110,7 +110,10 @@ public class CanteenICT {
 	private void preprocess()
 	{
 		//******************************************** YOUR CODE HERE (IF ANY) *******************************//
-		this.getwTable().removeAll(this.getwTable());
+		for (Customer c : this.getWaitToSeat()) {
+			c.Ttable = false;
+		}
+		
 		//****************************************************************************************************//
 	}
 	
@@ -121,17 +124,13 @@ public class CanteenICT {
 	{
 		//******************************************** YOUR CODE HERE (IF ANY) *******************************//
 		
-		
-		for (int i = 0 ; i < this.getWaitToEnter().size() ; i++){
-			for (int j = 0 ; j < this.getfoodStalls().size() ; j++){
-				for (int k = 0 ; k < this.getfoodStalls().get(j).getCustomerQueue().size() ; k++){
-					if (this.getWaitToEnter().get(i).equals(this.getfoodStalls().get(j).getCustomerQueue().get(k))){
-						getWaitToEnter().remove(getWaitToEnter().get(i));
-					}
-				}
-			}
+
+		if (this.getwStore().size() > 0) { // to remove customer from waiting to enter  add customer to the store
+			this.getWaitToEnter().removeAll(getwStore());
+					
 		}
-		for (int i = 0 ; i < this.getWaitToSeat().size() ; i++){
+		
+		for (int i = 0 ; i < this.getWaitToSeat().size() ; i++){// to remove customer from store after add customer to wait to seat
 			for (int j = 0 ; j < this.getfoodStalls().size() ; j++){
 				for (int k = 0 ; k < this.getfoodStalls().get(j).getCustomerQueue().size() ; k++){
 					if (this.getWaitToSeat().get(i).equals(this.getfoodStalls().get(j).getCustomerQueue().get(k))){
@@ -140,32 +139,16 @@ public class CanteenICT {
 				}
 			}
 		}
-//		for (int i = 0 ; i < this.getWaitToSeat().size() ; i++){
-//			for (int j = 0 ; j < this.getfoodStalls().size() ; j++){
-//				for (int k = 0 ; k < this.getfoodStalls().get(j).getCustomerQueue().size() ; k++){
-//					if (this.getWaitToSeat().get(i).equals(this.getfoodStalls().get(j).getCustomerQueue().get(k))){
-//						getWaitToSeat().remove(getWaitToSeat().get(i));
-//					}
-//				}
-//			}
-//		}
-		if (this.getSeat().size() > 0) {
-			if (this.getSeat().equals(this.getWaitToSeat())) {
-				this.getWaitToSeat().remove(this.getWaitToSeat().get(0));
-				this.getSeat().remove(this.getSeat().get(0));
+		
+		if (this.getSeat().size() > 0) { // to remove customer from waiting to seat  add customer to the table
+			for (int i = 0 ; i < this.getWaitToSeat().size() ; i++) {
+				if (this.getWaitToSeat().size() > 0) {
+					this.getWaitToSeat().removeAll(getSeat());
+				}
 			}
 		}
-		
-//		for (int i = 0 ; i < this.getDone().size() ; i++){
-//			for (int j = 0 ; j < this.getTable().size() ; j++){
-//				for (int k = 0 ; k < this.getTable().get(j).getSeatedCustomers().size() ; k++){
-//				if (this.getDone().get(i).equals(this.getTable().get(j))){
-//					getTable().remove(getTable().get(i));
-//					}
-//				}
-//			}
-//		}
-		if (this.getwTable().size() > 0) {
+	
+		if (this.getwTable().size() > 0) {// to remove customer from table after add customer to done eating
 			for (int i = 0 ; i < this.getTable().size() ; i++) {
 				if (this.getTable().get(i).getSeatedCustomers().size() > 0) {
 					this.getTable().get(i).getSeatedCustomers().removeAll(this.getwTable());
@@ -245,32 +228,37 @@ public class CanteenICT {
 	
 	
 	//******************************************** YOUR ADDITIONAL CODE HERE (IF ANY) *******************************//
-	public List<Customer> getAllcustomer(){
+	public List<Customer> getAllcustomer(){ //sent list of allcustomer
 		return this.allCustomers;
 	}
-	public List<Customer> getWaitToEnter(){
+	public List<Customer> getWaitToEnter(){//sent list of customer wait to enter store
 		return this.waitToEnterQueue;
 	}
-	public List<Customer> getWaitToSeat(){
+	public List<Customer> getWaitToSeat(){//sent list of customer wait to seat
 		return this.waitToSeatQueue;
 	}
-	public List<Customer> getDone(){
+	public List<Customer> getDone(){ // sent list of customer that done eating
 		return this.doneQueue;
 	}
-	public List<FoodStall> getfoodStalls(){
+	public List<FoodStall> getfoodStalls(){ // sent list of food store
 		return this.foodStalls;
 	}
-	public List<Table> getTable(){
+	public List<Table> getTable(){ // sent list of table
 		return this.tables;
 	}
-	private List<Customer> waitSeat = new ArrayList<Customer>();
+	private List<Customer> waitSeat = new ArrayList<Customer>(); // clone of list wait to seat to check to delete
 	public List <Customer> getSeat(){
 		return this.waitSeat;
 	}
-	private List<Customer> waitTable = new ArrayList<Customer>();
+	private List<Customer> waitTable = new ArrayList<Customer>();// clone of list customer that done eating
 	public List <Customer> getwTable(){
 		return this.waitTable;
 	}
+	private List<Customer> waitStore = new ArrayList<Customer>(); // clone of list customer that come to store
+	public List <Customer> getwStore(){
+		return this.waitStore;
+	}
+	
 	//****************************************************************************************************//
 					
 		
